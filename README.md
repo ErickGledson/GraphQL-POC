@@ -1,1 +1,1 @@
-graphql-poc
+GraphQL - POC
