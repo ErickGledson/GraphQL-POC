@@ -248,6 +248,8 @@ const UserModel = [
   }
 ]
 
+const generateNewUserId = () => (Math.max(...UserModel.map(u => u.id)) || 0) + 1;
+
 const UsersQuery = {
   usersAmount: {
     type: GraphQLInt,
@@ -257,11 +259,11 @@ const UsersQuery = {
     type: new GraphQLList(UsersType),
     resolve: (_, { name, email, orderType }) => UserModel.filter(u =>
       (!name || u.name.includes(name))
-      && (!email || u.email.includes(email))
+      && (!email || (u.email && u.email.includes(email)))
       // && (!orderType || u.orders.some(o => o.type.includes(orderType)))
     ).map(u => ({
       ...u,
-      orders: u.orders.filter(o => !orderType|| o.type.includes(orderType)),
+      orders: u.orders.filter(o => !orderType || o.type.includes(orderType)),
     })),
     args: {
       name: {
@@ -282,11 +284,28 @@ const UsersQuery = {
         type: new GraphQLNonNull(GraphQLInt),
       }
     },
-    resolve: (_, { id }) => {
-      const User = UserModel.find(u => u.id === id);
-      return User;
+    resolve: (_, { id }) => UserModel.find(u => u.id === id),
+  }
+};
+
+const UsersMutation = {
+  createUser: {
+    type: UsersType,
+    args: {
+      name: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      email: {
+        type: GraphQLString,
+      },
+    },
+    resolve: (_, user) => {
+      user.id = generateNewUserId();
+      // user.orders = [];
+      UserModel.push(user);
+      return user;
     }
   }
-}
+};
 
-module.exports = UsersQuery;
+module.exports = { UsersQuery, UsersMutation };
