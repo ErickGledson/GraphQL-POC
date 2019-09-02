@@ -11,7 +11,7 @@
   "dependencies": {
     "apollo-server-restify": "^1.3.6",
     "graphql": "^0.13.2",
-    "restify": "^7.2.1",
-    "loadesh": ">=4.17.11"
+    "lodash": "^4.17.15",
+    "restify": "^7.2.1"
   }
 }
