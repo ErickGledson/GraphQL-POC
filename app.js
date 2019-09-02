@@ -5,13 +5,13 @@ const Schema = require('./graphql/Schema');
 const SERVER_PORT = 3000;
 const GRAPHQL_OPTIONS = { schema: Schema };
 
-const SERVER = restify.createServer({ title: 'Apollo Server' });
+const server = restify.createServer({ title: 'Apollo Server' });
 
-SERVER.use(restify.plugins.bodyParser());
-SERVER.use(restify.plugins.queryParser());
+server.use(restify.plugins.bodyParser());
+server.use(restify.plugins.queryParser());
 
-SERVER.post('/graphql', graphqlRestify(GRAPHQL_OPTIONS));
-SERVER.get('/graphql', graphqlRestify(GRAPHQL_OPTIONS));
-SERVER.get('/igraphql', graphiqlRestify({ endpointURL: '/graphql' }));
+server.post('/graphql', graphqlRestify(GRAPHQL_OPTIONS));
+server.get('/graphql', graphqlRestify(GRAPHQL_OPTIONS));
+server.get('/igraphql', graphiqlRestify({ endpointURL: '/graphql' }));
 
-SERVER.listen(SERVER_PORT, () => console.log(`SERVER IS ON. PORT ${SERVER_PORT}`));
+server.listen(SERVER_PORT, () => console.log(`SERVER IS ON. PORT ${SERVER_PORT}`));
