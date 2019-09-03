@@ -65,7 +65,7 @@ const UsersType = new GraphQLObjectType({
                   type: OrderTypeEnum,
                 }
             },
-            resolve: (user, { type }) => { return user.orders.filter(o => !type || o.type.includes(type)) }
+            resolve: (user, { type }) => { return user.orders && user.orders.filter(o => !type || o.type.includes(type)) }
         }
     })
 });
