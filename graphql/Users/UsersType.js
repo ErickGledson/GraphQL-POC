@@ -5,7 +5,23 @@ const {
     GraphQLObjectType,
     GraphQLInputObjectType,
     GraphQLNonNull,
+    GraphQLEnumType,
 } = require('graphql');
+
+const OrderTypeEnum = new GraphQLEnumType({
+    name: 'OrderTypeEnum',
+    values: {
+      HOTEL: {
+        value: "hotel",
+      },
+      PACOTE: {
+        value: "pacote",
+      },
+      ATIVIDADE: {
+        value: "atividade",
+      },
+    },
+  })
 
 const OrdersType = new GraphQLObjectType({
     name: 'OrdersObjectType',
@@ -46,7 +62,7 @@ const UsersType = new GraphQLObjectType({
             type: new GraphQLList(OrdersType),
             args: {
                 type: {
-                  type: GraphQLString,
+                  type: OrderTypeEnum,
                 }
             },
             resolve: (user, { type }) => { return user.orders.filter(o => !type || o.type.includes(type)) }
@@ -69,4 +85,4 @@ const UserInputType = new GraphQLInputObjectType({
     }),
 });
 
-module.exports = { UsersType, UserInputType };
+module.exports = { UsersType, UserInputType, OrderTypeEnum };

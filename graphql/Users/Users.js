@@ -3,10 +3,9 @@ const {
   GraphQLList,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLEnumType
 } = require('graphql');
 
-const { UsersType, UserInputType } = require('./UsersType');
+const { UsersType, UserInputType, OrderTypeEnum } = require('./UsersType');
 
 // https://www.json-generator.com/
 // [
@@ -271,20 +270,7 @@ const UsersQuery = {
         type: GraphQLString,
       },
       orderType: {
-        type: new GraphQLEnumType({
-          name: 'OrderTypeEnum',
-          values: {
-            HOTEL: {
-              value: "hotel",
-            },
-            PACOTE: {
-              value: "pacote",
-            },
-            ATIVIDADE: {
-              value: "atividade",
-            },
-          },
-        }),
+        type: OrderTypeEnum,
       },
     }
   },
