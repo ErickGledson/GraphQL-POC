@@ -293,7 +293,7 @@ const UsersMutation = {
         type: UserInputType
       }  
     },
-    resolve: (_, user) => {
+    resolve: (_, { user }) => {
       user.id = generateNewUserId();
       // user.orders = [];
       UserModel.push(user);
