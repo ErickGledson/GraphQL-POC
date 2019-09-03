@@ -1,4 +1,4 @@
-const {
+const { 
     GraphQLInt,
     GraphQLString,
     GraphQLList,
@@ -8,12 +8,12 @@ const {
 } = require('graphql');
 
 const OrdersType = new GraphQLObjectType({
-    name: 'Orders',
+    name: 'OrdersObjectType',
     description: 'A Orders Type Definition',
     fields: () => ({
         id: {
             type: GraphQLInt,
-            description: 'An order ID',
+            description: 'A order ID'
         },
         type: {
             type: GraphQLString,
@@ -32,18 +32,24 @@ const UsersType = new GraphQLObjectType({
     fields: () => ({
         id: {
             type: GraphQLInt,
-            description: 'A user ID'
+            description: 'An user ID'
         },
         name: {
             type: GraphQLString,
-            description: 'A user name'
+            description: 'An user name'
         },
         email: {
             type: GraphQLString,
-            description: 'A user email address'
+            description: 'An user email address'
         },
         orders: {
-            type: new GraphQLList(OrdersType)
+            type: new GraphQLList(OrdersType),
+            args: {
+                type: {
+                  type: GraphQLString,
+                }
+            },
+            resolve: (user, { type }) => { return user.orders.filter(o => !type || o.type.includes(type)) }
         }
     })
 });

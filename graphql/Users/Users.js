@@ -3,6 +3,7 @@ const {
   GraphQLList,
   GraphQLString,
   GraphQLNonNull,
+  GraphQLEnumType
 } = require('graphql');
 
 const { UsersType, UserInputType } = require('./UsersType');
@@ -260,11 +261,8 @@ const UsersQuery = {
     resolve: (_, { name, email, orderType }) => UserModel.filter(u =>
       (!name || u.name.includes(name))
       && (!email || (u.email && u.email.includes(email)))
-      // && (!orderType || u.orders.some(o => o.type.includes(orderType)))
-    ).map(u => ({
-      ...u,
-      orders: u.orders.filter(o => !orderType || o.type.includes(orderType)),
-    })),
+      && (!orderType || u.orders.some(o => o.type.includes(orderType)))
+    ),
     args: {
       name: {
         type: GraphQLString,
@@ -273,7 +271,20 @@ const UsersQuery = {
         type: GraphQLString,
       },
       orderType: {
-        type: GraphQLString,
+        type: new GraphQLEnumType({
+          name: 'OrderTypeEnum',
+          values: {
+            HOTEL: {
+              value: "hotel",
+            },
+            PACOTE: {
+              value: "pacote",
+            },
+            ATIVIDADE: {
+              value: "atividade",
+            },
+          },
+        }),
       },
     }
   },
@@ -293,10 +304,10 @@ const UsersMutation = {
     type: UsersType,
     args: {
       user: {
-        type: UserInputType,
-      },
+        type: UserInputType
+      }  
     },
-    resolve: (_, { user }) => {
+    resolve: (_, user) => {
       user.id = generateNewUserId();
       // user.orders = [];
       UserModel.push(user);
