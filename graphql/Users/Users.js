@@ -5,7 +5,7 @@ const {
   GraphQLNonNull,
 } = require('graphql');
 
-const UsersType = require('./UsersType');
+const { UsersType, UserInputType } = require('./UsersType');
 
 // https://www.json-generator.com/
 // [
@@ -292,14 +292,11 @@ const UsersMutation = {
   createUser: {
     type: UsersType,
     args: {
-      name: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-      email: {
-        type: GraphQLString,
+      user: {
+        type: UserInputType,
       },
     },
-    resolve: (_, user) => {
+    resolve: (_, { user }) => {
       user.id = generateNewUserId();
       // user.orders = [];
       UserModel.push(user);
